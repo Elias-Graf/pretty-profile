@@ -1,34 +1,123 @@
 <script lang="ts">
-	const data = {
-		items: [
-			{
-				badge_counts: { bronze: 34, silver: 16, gold: 1 },
-				account_id: 14280915,
-				is_employee: false,
-				last_modified_date: 1657229959,
-				last_access_date: 1657284048,
-				reputation_change_year: 450,
-				reputation_change_quarter: 20,
-				reputation_change_month: 20,
-				reputation_change_week: 10,
-				reputation_change_day: 0,
-				reputation: 2652,
-				creation_date: 1536072294,
-				user_type: 'registered',
-				user_id: 10315665,
-				location: 'Switzerland',
-				website_url: '',
-				link: 'https://stackoverflow.com/users/10315665/elias',
-				profile_image: 'https://i.stack.imgur.com/9PZNx.png?s=256&g=1',
-				display_name: 'Elias'
-			}
-		],
-		has_more: false,
-		quota_max: 300,
-		quota_remaining: 281
-	} as const;
+	import html2Canvas from 'html2canvas';
 
-    let hello = "Elias";
+	interface StackoverflowProfile {
+		badge_counts: { bronze: number; silver: number; gold: number };
+		reputation: number;
+		profile_image: string;
+		display_name: string;
+	}
+	interface StackoverflowUserApiRes {
+		items: StackoverflowProfile[];
+	}
+
+	let stackoverflowId = '';
+	let profile: StackoverflowProfile | undefined;
+
+	async function loadProfile() {
+		if (stackoverflowId.trim().length === 0) return;
+
+		const res = await fetch(
+			`https://api.stackexchange.com/users/${stackoverflowId}?site=stackoverflow`
+		);
+		const data: StackoverflowUserApiRes = await res.json();
+
+		profile = data.items[0];
+	}
+
+	function toCanvas() {
+		html2Canvas(document.getElementById('preview')!, {
+			allowTaint: true,
+			scale: 2,
+			backgroundColor: 'transparent'
+		}).then((canvas) => {
+			document.body.append(canvas);
+		});
+	}
 </script>
 
-<h1>{hello}</h1>
+<input bind:value={stackoverflowId} on:focusout={loadProfile} placeholder="stackoverflow id" />
+<div class="container">
+	{#if profile}
+		<div class="card" id="preview">
+			<img class="user-image" src={profile.profile_image} />
+			<div class="right">
+				<span>
+					<img class="stackoverflow" src="stackoverflow_logo.svg" />
+					{profile.display_name}
+				</span>
+				<span class="reputation">{profile.reputation.toLocaleString('en')}</span>
+				<div class="badges">
+					<span class="gold">{profile.badge_counts.gold}</span>
+					<span class="silver">{profile.badge_counts.silver}</span>
+					<span class="bronze">{profile.badge_counts.bronze}</span>
+				</div>
+			</div>
+		</div>
+	{/if}
+</div>
+<button on:click={toCanvas}>Download</button>
+
+<style lang="scss">
+	@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,700;1,400&display=swap');
+
+	.container {
+		display: flex;
+		justify-content: center;
+		font-family: 'Lato', sans-serif;
+	}
+
+	.card {
+		font-size: 14pt;
+		width: 14rem;
+		display: flex;
+		justify-content: space-between;
+		color: rgb(223, 223, 223);
+		background-color: rgb(44, 44, 44);
+		padding: 0.5rem;
+		border-radius: 0.5rem;
+	}
+
+	.user-image {
+		width: 5rem;
+		height: 5rem;
+		border-radius: 100%;
+	}
+
+	.right {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		justify-content: space-between;
+	}
+
+	.stackoverflow {
+		width: 1em;
+	}
+
+	.reputation {
+		font-weight: bold;
+	}
+
+	.badges {
+		span {
+			&::before {
+				content: '';
+				display: inline-block;
+				width: 0.5em;
+				border-radius: 100%;
+				aspect-ratio: 1/1;
+			}
+
+			&.gold::before {
+				background-color: #ffcc00;
+			}
+			&.silver::before {
+				background-color: #c0c0c0;
+			}
+			&.bronze::before {
+				background-color: #cc9966;
+			}
+		}
+	}
+</style>
