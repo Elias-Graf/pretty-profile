@@ -26,7 +26,7 @@ namespace StackOverflowApi {
 
         const data: { items: Profile[] } = await res.json();
 
-        if (data.items.length === 0) throw new NotFound();
+        if (data.items.length !== 1) throw new NotFound();
 
         return data.items[0];
     }
