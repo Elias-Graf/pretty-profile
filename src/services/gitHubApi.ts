@@ -3,6 +3,7 @@ import { NotFound } from './errors';
 namespace GitHubApi {
 	export interface Profile {
 		avatar_url: string;
+		login: string;
 		name: string;
 	}
 

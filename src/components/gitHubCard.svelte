@@ -16,15 +16,35 @@
 		src={profile.avatar_url}
 		alt="GitHub avatar of the user {profile.name}"
 	/>
-	{profile.name}
+	<div class="right">
+		<span class="name">{profile.name}</span>
+		<span class="login">@{profile.login}</span>
+	</div>
 </Card>
 
 <style lang="scss">
 	.roundAvatar {
 		border-radius: 100%;
 	}
+
 	.avatar {
 		width: var(--avatarSize, 5em);
 		height: var(--avatarSize, 5em);
+	}
+
+	.right {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+	}
+
+	.name {
+		font-weight: bold;
+		font-size: 18pt;
+	}
+
+	.login {
+		color: rgb(66, 66, 244);
 	}
 </style>
