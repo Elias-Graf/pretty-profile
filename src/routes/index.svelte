@@ -1,5 +1,7 @@
 <script lang="ts">
-    import Stackoverflow from "../components/stackoverflow.svelte";
+	import GitHub from '../components/gitHub.svelte';
+	import StackOverflow from '../components/stackOverflow.svelte';
 </script>
 
-<Stackoverflow />
+<StackOverflow />
+<GitHub />
