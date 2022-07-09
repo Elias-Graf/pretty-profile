@@ -4,16 +4,27 @@
 	import Card from './card.svelte';
 
 	export let profile: GitHubApi.Profile;
+	export let roundAvatar = true;
+	export let avatarSize: string = '';
 </script>
 
 <Card>
-	<img class="avatar" src={profile.avatar_url} alt="GitHub avatar of the user {profile.name}" />
+	<img
+		class="avatar"
+		class:roundAvatar
+		style="--avatarSize:{avatarSize}"
+		src={profile.avatar_url}
+		alt="GitHub avatar of the user {profile.name}"
+	/>
 	{profile.name}
 </Card>
 
 <style lang="scss">
+	.roundAvatar {
+		border-radius: 100%;
+	}
 	.avatar {
-		width: 5em;
-		height: 5em;
+		width: var(--avatarSize, 5em);
+		height: var(--avatarSize, 5em);
 	}
 </style>
