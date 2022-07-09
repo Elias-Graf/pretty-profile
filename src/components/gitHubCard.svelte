@@ -5,7 +5,7 @@
 
 	export let profile: GitHubApi.Profile;
 	export let roundAvatar = true;
-	export let avatarSize: string = '';
+	export let avatarSize = '';
 </script>
 
 <Card>

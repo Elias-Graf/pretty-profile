@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let bg: string = '';
+	export let bg = '';
 </script>
 
 <div style="--bg:{bg}">

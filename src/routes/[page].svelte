@@ -2,36 +2,39 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 
+	import UserIdInput from '../components/userIdInput.svelte';
 	import StackOverflowCard from '../components/stackOverflowCard.svelte';
 	import StackOverflowApi from '../services/stackOverflowApi';
+	import PageButtons from '../components/pageButtons.svelte';
+	import Page from '../page';
 	import GitHubCard from '../components/gitHubCard.svelte';
 	import GitHubApi from '../services/gitHubApi';
-	import { debounce } from '../utils/debounce';
-
-	enum Page {
-		GitHub = 'gitHub',
-		StackOverflow = 'stackOverflow'
-	}
 
 	type PageData =
 		| { currentPage: Page.GitHub; profile: GitHubApi.Profile | undefined }
 		| { currentPage: Page.StackOverflow; profile: StackOverflowApi.Profile | undefined };
 
-	const debouncer = debounce(500);
+	$: currentPage = getPageFromParams();
+
+	// Update the url in case the page changes
+	$: goto(currentPage);
 
 	let inpVal: string | undefined = undefined;
-	let pageData: PageData = { currentPage: $page.params['page'] as Page, profile: undefined };
-
-	$: currentPage = $page.params['page'];
+	let pageData: PageData = { currentPage, profile: undefined };
 
 	// Clear the data when the page changes
 	$: if (currentPage) {
 		pageData.profile = undefined;
 		inpVal = undefined;
-	};
+	}
 
-	// Load the corresponding profile
-	$: debouncer(inpVal, async () => {
+	$: loadProfileFor(currentPage, inpVal);
+
+	function getPageFromParams(): Page {
+		return $page.params['page'] as Page;
+	}
+
+	async function loadProfileFor(currentPage: Page, inpVal: string | undefined) {
 		inpVal = (inpVal ?? '').trim();
 		if (inpVal.length === 0) return;
 
@@ -40,22 +43,12 @@
 		} else if (currentPage === Page.StackOverflow) {
 			pageData = { currentPage, profile: await StackOverflowApi.profileOf(inpVal) };
 		}
-	});
+	}
 </script>
 
-<div class="pageButtons">
-	<button class:selected={currentPage === Page.GitHub} on:click={() => goto(Page.GitHub)}
-		>GitHub</button
-	><button
-		class:selected={currentPage === Page.StackOverflow}
-		on:click={() => goto(Page.StackOverflow)}>Stack Overflow</button
-	>
-</div>
+<PageButtons bind:page={currentPage} />
 
-<input
-	bind:value={inpVal}
-	placeholder={currentPage === Page.GitHub ? 'Enter GitHub username' : 'Enter Stack Overflow ID'}
-/>
+<UserIdInput page={currentPage} bind:value={inpVal} />
 
 <div class="container">
 	{#if pageData.profile !== undefined}
@@ -89,38 +82,6 @@
 			color: white;
 			background-color: black;
 			align-items: center;
-		}
-
-		input {
-			background-color: black;
-			color: white;
-			border: none;
-			font-size: 24pt;
-			border: 0.3rem solid var(--accent);
-			border-radius: 0.3rem;
-		}
-	}
-
-	.pageButtons {
-		border: 0.3rem solid var(--accent);
-		border-radius: 0.3rem;
-		display: flex;
-
-		button {
-			flex: 1;
-			border: none;
-			background: none;
-			color: var(--accent);
-			font-size: 20pt;
-
-			&:hover {
-				background-color: var(--accent-dark);
-			}
-
-			&.selected {
-				color: white;
-				background-color: var(--accent);
-			}
 		}
 	}
 
