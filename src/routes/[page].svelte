@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
+	import { browser } from '$app/env';
 
 	import UserIdInput from '../components/userIdInput.svelte';
 	import StackOverflowCard from '../components/stackOverflowCard.svelte';
@@ -17,7 +18,7 @@
 	$: currentPage = getPageFromParams();
 
 	// Update the url in case the page changes
-	$: goto(currentPage);
+	$: browser && goto(currentPage);
 
 	let inpVal: string | undefined = undefined;
 	let pageData: PageData = { currentPage, profile: undefined };
