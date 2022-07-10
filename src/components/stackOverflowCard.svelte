@@ -1,11 +1,13 @@
 <script lang="ts">
-	import type StackOverflowApi from '../services/stackOverflowApi';
 	import Card from './card.svelte';
+	import type CardStyle from '../cardStyle';
+	import type StackOverflowApi from '../services/stackOverflowApi';
 
 	export let profile: StackOverflowApi.Profile;
+	export let style: CardStyle;
 </script>
 
-<Card>
+<Card {style}>
 	<img class="user-image" alt="profile pri" src={profile.profile_image} />
 	<div class="right">
 		<span>

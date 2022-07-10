@@ -2,17 +2,16 @@
 	import { debounce } from '../utils/debounce';
 	import Page from '../page';
 
-	export let value: string | undefined;
+	export let value: string;
 	export let page: Page;
-
-	let inpVal = value;
 
 	$: placeholder = placeholderFor(page);
 
 	// Only emit a value change once the input hasn't changed for the specified
 	// debounce timeout.
-	const debouncer = debounce(500);
-	$: debouncer(inpVal, () => (value = inpVal));
+	const debouncer = debounce<string>(500);
+	const valueChanged = (event: { currentTarget: HTMLInputElement }) =>
+		debouncer(event.currentTarget.value, (inpVal) => (value = inpVal));
 
 	function placeholderFor(page: Page): string {
 		switch (page) {
@@ -24,15 +23,10 @@
 	}
 </script>
 
-<input bind:value={inpVal} {placeholder} />
+<input {value} {placeholder} on:input={valueChanged} />
 
 <style lang="scss">
 	input {
-		background-color: black;
-		color: white;
-		border: none;
 		font-size: 24pt;
-		border: 0.3rem solid var(--accent);
-		border-radius: 0.3rem;
 	}
 </style>

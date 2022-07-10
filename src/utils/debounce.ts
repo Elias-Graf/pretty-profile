@@ -2,7 +2,7 @@ import { browser } from '$app/env';
 
 export interface Debouncer<T> {
 	timer?: number;
-	(val: T, cb: () => unknown): void;
+	(val: T, cb: (val: T) => unknown): void;
 }
 
 /**
@@ -18,10 +18,10 @@ export interface Debouncer<T> {
  * @param delay how long to wait before invoking the callback.
  */
 export function debounce<T>(delay: number): Debouncer<T> {
-	const debouncer = (val: T, cb: () => unknown) => {
+	const debouncer = (val: T, cb: (val: T) => unknown) => {
 		if (browser) {
 			window.clearTimeout(debouncer.timer);
-			debouncer.timer = window.setTimeout(cb, delay);
+			debouncer.timer = window.setTimeout(() => cb(val), delay);
 		}
 	};
 	debouncer.timer = undefined as number | undefined;

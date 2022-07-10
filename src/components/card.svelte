@@ -1,20 +1,24 @@
 <script lang="ts">
-	export let bg = '';
+	import type CardStyle from '../cardStyle';
+
+	export let style: CardStyle;
 </script>
 
-<div style="--bg:{bg}">
+<div
+	style:background-color={style.backgroundColor}
+	style:border-radius="{style.borderRadius}px"
+	style:color={style.color}
+	style:width="{style.width}px"
+>
 	<slot />
 </div>
 
 <style lang="scss">
 	div {
-		background: var(--bg, rgb(44, 44, 44));
 		font-size: 14pt;
 		width: 14rem;
 		display: flex;
 		justify-content: space-between;
-		color: rgb(223, 223, 223);
 		padding: 0.5rem;
-		border-radius: 0.5rem;
 	}
 </style>

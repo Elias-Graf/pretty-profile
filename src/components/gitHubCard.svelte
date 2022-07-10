@@ -1,35 +1,31 @@
 <script lang="ts">
+	import type CardStyle from '../cardStyle';
 	import type GitHubApi from '../services/gitHubApi';
-
 	import Card from './card.svelte';
+	import GitHubLogo from './gitHubLogo.svelte';
 
+	export let style: CardStyle;
 	export let profile: GitHubApi.Profile;
-	export let roundAvatar = true;
-	export let avatarSize = '';
 </script>
 
-<Card>
+<Card {style}>
 	<img
 		class="avatar"
-		class:roundAvatar
-		style="--avatarSize:{avatarSize}"
+		class:roundAvatar={style.roundAvatar}
+		style:height="{style.avatarSize}px"
+		style:width="{style.avatarSize}px"
 		src={profile.avatar_url}
 		alt="GitHub avatar of the user {profile.name}"
 	/>
 	<div class="right">
-		<span class="name">{profile.name}</span>
-		<span class="login">@{profile.login}</span>
+		<span class="name"><GitHubLogo fill={style.color} /> {profile.name}</span>
+		<span style:color={style.linkColor}>@{profile.login}</span>
 	</div>
 </Card>
 
 <style lang="scss">
 	.roundAvatar {
 		border-radius: 100%;
-	}
-
-	.avatar {
-		width: var(--avatarSize, 5em);
-		height: var(--avatarSize, 5em);
 	}
 
 	.right {
@@ -42,9 +38,5 @@
 	.name {
 		font-weight: bold;
 		font-size: 18pt;
-	}
-
-	.login {
-		color: rgb(66, 66, 244);
 	}
 </style>
