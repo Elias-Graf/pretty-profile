@@ -4,15 +4,16 @@
 	import { browser } from '$app/env';
 
 	import CardStyleInput from '../components/cardStyleInput.svelte';
+	import DownloadCard from '../components/downloadCard.svelte';
 	import GitHubApi from '../services/gitHubApi';
 	import GitHubCard from '../components/gitHubCard.svelte';
 	import Page from '../page';
 	import PageButtons from '../components/pageButtons.svelte';
+	import randomAccentStore from '../services/randomAccentStore';
 	import StackOverflowApi from '../services/stackOverflowApi';
 	import StackOverflowCard from '../components/stackOverflowCard.svelte';
 	import type CardStyle from '../cardStyle';
 	import UserIdInput from '../components/userIdInput.svelte';
-	import randomAccentStore from '../services/randomAccentStore';
 
 	type PageData =
 		| { currentPage: Page.GitHub; profile: GitHubApi.Profile | undefined }
@@ -25,6 +26,7 @@
 
 	let inpVal = '';
 	let pageData: PageData = { currentPage, profile: undefined };
+	let cardRef: HTMLElement | undefined = undefined;
 
 	// Clear the user ID input when the page changes
 	$: currentPage, (inpVal = '');
@@ -70,11 +72,19 @@
 	<UserIdInput page={currentPage} bind:value={inpVal} />
 
 	{#if pageData.profile !== undefined}
-		{#if pageData.currentPage === Page.GitHub}
-			<GitHubCard {style} profile={pageData.profile} />
-		{:else if pageData.currentPage === Page.StackOverflow}
-			<StackOverflowCard {style} profile={pageData.profile} />
-		{/if}
+		<h1>Preview</h1>
+		<div bind:this={cardRef}>
+			{#if pageData.currentPage === Page.GitHub}
+				<GitHubCard {style} profile={pageData.profile} />
+			{:else if pageData.currentPage === Page.StackOverflow}
+				<StackOverflowCard {style} profile={pageData.profile} />
+			{/if}
+		</div>
+	{/if}
+
+	{#if cardRef !== undefined}
+		<h1>Image</h1>
+		<DownloadCard {cardRef} />
 	{/if}
 </main>
 

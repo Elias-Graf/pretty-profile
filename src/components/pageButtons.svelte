@@ -18,10 +18,11 @@
 		display: flex;
 
 		button {
-			flex: 1;
-			border: none;
 			background: none;
+			border-radius: 0;
+			border: none;
 			color: var(--accent);
+			flex: 1;
 			font-size: 20pt;
 
 			&:hover {
