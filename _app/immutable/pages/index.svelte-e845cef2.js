@@ -1,0 +1,1 @@
+import{S as e,i as o,s as a}from"../chunks/index-07c9d06e.js";import{g as n,P as r}from"../chunks/page-60b6c634.js";import"../chunks/singletons-d1fb5791.js";function i(t){return n(r.GitHub),[]}class m extends e{constructor(s){super(),o(this,s,i,null,a,{})}}export{m as default};

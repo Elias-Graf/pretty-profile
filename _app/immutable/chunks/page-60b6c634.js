@@ -1,0 +1,1 @@
+import{c as t}from"./singletons-d1fb5791.js";t.disable_scroll_handling;const o=t.goto;t.invalidate;t.prefetch;t.prefetch_routes;t.before_navigate;t.after_navigate;var a=(e=>(e.GitHub="gitHub",e.StackOverflow="stackOverflow",e))(a||{});export{a as P,o as g};
