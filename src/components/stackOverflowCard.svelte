@@ -11,7 +11,7 @@
 	<img class="user-image" alt="profile pri" src={profile.profile_image} />
 	<div class="right">
 		<span>
-			<img class="stackOverflow" alt="" src="stack.svg" />
+			<StackOverflowLogo />
 			{profile.display_name}
 		</span>
 		<span class="reputation">{profile.reputation.toLocaleString('en')}</span>
