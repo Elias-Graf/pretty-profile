@@ -10,7 +10,7 @@
 
 <Card {style}>
 	<img
-		class="user-image"
+		class:round-avatar={style.roundAvatar}
 		style:width="{style.avatarSize}px"
 		style:height="{style.avatarSize}px"
 		alt="profile pri"
@@ -33,9 +33,7 @@
 <style lang="scss">
 	@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,700;1,400&display=swap');
 
-	.user-image {
-		width: 5rem;
-		height: 5rem;
+	.round-avatar {
 		border-radius: 100%;
 	}
 
@@ -44,10 +42,6 @@
 		flex-direction: column;
 		align-items: flex-end;
 		justify-content: space-between;
-	}
-
-	.stackOverflow {
-		width: 1em;
 	}
 
 	.reputation {
