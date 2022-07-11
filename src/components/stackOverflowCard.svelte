@@ -2,13 +2,20 @@
 	import Card from './card.svelte';
 	import type CardStyle from '../cardStyle';
 	import type StackOverflowApi from '../services/stackOverflowApi';
+	import StackOverflowLogo from './stackOverflowLogo.svelte';
 
 	export let profile: StackOverflowApi.Profile;
 	export let style: CardStyle;
 </script>
 
 <Card {style}>
-	<img class="user-image" alt="profile pri" src={profile.profile_image} />
+	<img
+		class="user-image"
+		style:width="{style.avatarSize}px"
+		style:height="{style.avatarSize}px"
+		alt="profile pri"
+		src={profile.profile_image}
+	/>
 	<div class="right">
 		<span>
 			<StackOverflowLogo />
